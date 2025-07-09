@@ -4,8 +4,8 @@ import { Student, Course, Career, GraduateProgram, SpecializationTrack, PostGrad
 export const mockStudents: Student[] = [
   {
     id: 'STU001',
-    name: 'Alice Johnson',
-    email: 'alice.johnson@university.edu',
+    name: 'Stewart Johnson',
+    email: 'Stewart.johnson@university.edu',
     currentCredits: 85,
     totalCreditsNeeded: 120,
     currentGPA: 3.7,
@@ -34,8 +34,8 @@ export const mockStudents: Student[] = [
   },
   {
     id: 'STU003',
-    name: 'Carol Davis',
-    email: 'carol.davis@university.edu',
+    name: 'Kevin Davis',
+    email: 'Kevin.davis@university.edu',
     currentCredits: 95,
     totalCreditsNeeded: 120,
     currentGPA: 3.9,
@@ -49,8 +49,8 @@ export const mockStudents: Student[] = [
   },
   {
     id: 'STU004',
-    name: 'David Wilson',
-    email: 'david.wilson@university.edu',
+    name: 'Dave Wilson',
+    email: 'dave.wilson@university.edu',
     currentCredits: 60,
     totalCreditsNeeded: 120,
     currentGPA: 3.2,

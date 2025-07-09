@@ -8,12 +8,14 @@ import ProgressTracking from './components/ProgressTracking';
 import GraduatePrograms from './components/GraduatePrograms';
 import SpecializationTracks from './components/SpecializationTracks';
 import PostGradPathways from './components/PostGradPathways';
+import UniversityAdvisorChat from './components/UniversityAdvisorChat';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('risk');
   const [activePathwayTab, setActivePathwayTab] = useState('programs');
   const [students, setStudents] = useState([]);
   const [careers, setCareers] = useState([]);
+  const [selectedStudent, setSelectedStudent] = useState('');
 
   useEffect(() => {
     // Fetch initial data
@@ -31,7 +33,8 @@ export default function Home() {
     { id: 'recommendations', label: 'Course Recommendations', icon: '📚' },
     { id: 'prerequisites', label: 'Prerequisites', icon: '🔗' },
     { id: 'progress', label: 'Progress Tracking', icon: '📊' },
-    { id: 'pathways', label: 'Graduate Pathways', icon: '🎓' }
+    { id: 'pathways', label: 'Graduate Pathways', icon: '🎓' },
+    { id: 'advisor', label: 'AI Advisor Chat', icon: '🤖' }
   ];
 
   return (
@@ -79,6 +82,31 @@ export default function Home() {
         {activeTab === 'recommendations' && <CourseRecommendations careers={careers} students={students} />}
         {activeTab === 'prerequisites' && <PrerequisiteVisualization />}
         {activeTab === 'progress' && <ProgressTracking students={students} careers={careers} />}
+        {activeTab === 'advisor' && (
+          <div className="space-y-6">
+            {/* Student Selection for Advisor */}
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex items-center space-x-4">
+                <label className="text-sm font-medium text-gray-700">Select Student:</label>
+                <select
+                  value={selectedStudent}
+                  onChange={(e) => setSelectedStudent(e.target.value)}
+                  className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Choose a student...</option>
+                  {students.map((student: any) => (
+                    <option key={student.id} value={student.id}>
+                      {student.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            {/* AI Advisor Chat */}
+            <UniversityAdvisorChat selectedStudent={selectedStudent} />
+          </div>
+        )}
         {activeTab === 'pathways' && (
           <div className="space-y-6">
             {/* Pathways Sub-Navigation */}

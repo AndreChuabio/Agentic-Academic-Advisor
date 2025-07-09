@@ -19,10 +19,10 @@
 
 ### Q: What data does the system use?
 **A:** The POC uses mock data for 5 fictional students with realistic academic profiles:
-- Alice Johnson (High achiever, 3.7 GPA, Computer Science)
+- Stewart Johnson (High achiever, 3.7 GPA, Computer Science)
 - Bob Smith (Struggling student, 2.1 GPA, Computer Science)
-- Carol Davis (Excellent student, 3.9 GPA, Data Science)
-- David Wilson (Average student, 3.2 GPA, Business)
+- Kevin Davis (Excellent student, 3.9 GPA, Data Science)
+- Dave Wilson (Average student, 3.2 GPA, Business)
 - Emma Brown (Below average, 2.8 GPA, Education)
 
 ---
@@ -69,9 +69,9 @@
 3. **Academic Standing**: Adjusts difficulty based on GPA
 4. **Graduate Preparation**: Includes prep courses for graduate school-interested students
 
-### Q: Why does Alice get different recommendations than Bob?
+### Q: Why does Stewart get different recommendations than Bob?
 **A:** 
-- **Alice (3.7 GPA)**: Gets advanced courses like "Advanced Algorithms" because she meets prerequisites and can handle difficulty
+- **Stewart (3.7 GPA)**: Gets advanced courses like "Advanced Algorithms" because she meets prerequisites and can handle difficulty
 - **Bob (2.1 GPA)**: Gets foundational courses and remedial support because he needs to strengthen basics first
 
 ---
@@ -173,7 +173,7 @@
 
 ### Q: How does the system work for each demo student?
 
-**Alice Johnson (High Achiever)**
+**Stewart Johnson (High Achiever)**
 - Risk: Green (low risk)
 - Recommendations: Advanced courses, graduate school prep
 - Graduate Programs: Eligible for MS/PhD in Computer Science
@@ -185,13 +185,13 @@
 - Graduate Programs: Currently ineligible, needs GPA improvement
 - Pathways: Internships for practical experience, skill building
 
-**Carol Davis (Excellent Student)**
+**Kevin Davis (Excellent Student)**
 - Risk: Green (excellent progress)
 - Recommendations: Advanced analytics courses
 - Graduate Programs: Eligible for PhD programs
 - Pathways: Research internships, accelerated programs
 
-**David Wilson (Business Student)**
+**Dave Wilson (Business Student)**
 - Risk: Yellow (moderate)
 - Recommendations: Business analytics courses
 - Graduate Programs: MBA eligible

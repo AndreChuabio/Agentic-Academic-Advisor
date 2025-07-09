@@ -101,3 +101,16 @@ export interface EligibilityCheck {
   admissionChance: 'High' | 'Medium' | 'Low';
   recommendations: string[];
 }
+
+// AI Advisor Types
+export interface AdvisorMessage {
+  role: 'student' | 'advisor';
+  content: string;
+  timestamp: Date;
+}
+
+export interface AdvisorSession {
+  studentId: string;
+  messages: AdvisorMessage[];
+  sessionId: string;
+}
