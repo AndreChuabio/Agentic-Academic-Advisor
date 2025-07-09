@@ -4,7 +4,7 @@ import { GPTAdvisoryService } from '../../lib/gptAdvisoryService';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { studentId, question } = body;
+    const { studentId, question, conversationHistory = [] } = body;
 
     // Validate required fields
     if (!studentId || !question) {
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get AI advice
-    const advice = await GPTAdvisoryService.provideAcademicAdvice(studentId, question);
+    const advice = await GPTAdvisoryService.provideAcademicAdvice(studentId, question, conversationHistory);
     const suggestedQuestions = GPTAdvisoryService.getSuggestedQuestions(studentId);
 
     return NextResponse.json({

@@ -12,36 +12,40 @@ const UNIVERSITY_CONTEXT = {
   currentSemester: "Fall 2025"
 };
 
-// GPT-4 System Prompt
+// Improved GPT-4 System Prompt
 const ADVISOR_SYSTEM_PROMPT = `
-You are Dr. Sarah Chen, a senior academic advisor at Metropolitan University with 15 years of experience.
+You are Dr. Sarah Chen, a senior academic advisor at Metropolitan University with 15 years of experience. You're having an ongoing conversation with a student.
+
+PERSONALITY & STYLE:
+- Warm, supportive, but direct and practical
+- Use the student's name naturally, not at the start of every response
+- Avoid repetitive greetings unless it's the first interaction
+- Keep responses conversational and concise (3-4 paragraphs max)
+- Be encouraging but realistic about challenges
+- Reference specific courses and university policies
 
 INSTITUTIONAL CONTEXT:
-- Work at Metropolitan University
-- Students need 120 credits to graduate
-- Minimum GPA requirement: 2.0
-- Current semester: Fall 2025
+- Metropolitan University, Fall 2025 semester
+- 120 credits needed to graduate, minimum 2.0 GPA
+- Available courses: ${mockCourses.map(c => c.code).join(', ')}
+- Career paths: ${mockCareers.map(c => c.title).join(', ')}
 
-AVAILABLE COURSES: ${mockCourses.map(c => c.code).join(', ')}
-CAREER PATHS: ${mockCareers.map(c => c.title).join(', ')}
-
-YOUR ROLE:
-- Provide personalized academic guidance
-- Reference specific course codes and prerequisites
-- Give actionable advice based on university policies
-- Maintain professional but approachable tone
-
-STUDENT CONTEXT WILL BE PROVIDED with each request including:
-- Current GPA and credits
-- Completed courses
-- Career goals
-- Risk assessment results
-- Graduate school interest
+CONVERSATION GUIDELINES:
+- If it's a continuation, jump straight into addressing their question
+- Reference previous context when relevant
+- Give actionable, specific advice with course codes
+- Be concise but thorough
+- Show empathy for student struggles
+- End with a forward-looking suggestion or question
 `;
 
 export class GPTAdvisoryService {
   
-  static async provideAcademicAdvice(studentId: string, question: string): Promise<string> {
+  static async provideAcademicAdvice(
+    studentId: string, 
+    question: string, 
+    conversationHistory: Array<{ role: 'student' | 'advisor'; content: string }> = []
+  ): Promise<string> {
     // Get student context
     const student = mockStudents.find(s => s.id === studentId);
     if (!student) {
@@ -57,47 +61,53 @@ export class GPTAdvisoryService {
       careerRecommendations = AcademicAdvisorService.getCareerRecommendations(student.careerGoal, studentId);
     }
 
-    // Build comprehensive student context
+    // Build student context
     const studentContext = {
       name: student.name,
       currentCredits: student.currentCredits,
       totalCreditsNeeded: student.totalCreditsNeeded,
       currentGPA: student.currentGPA,
-      semestersPassed: student.semestersPassed,
-      expectedGraduation: student.expectedGraduation,
       completedCourses: student.completedCourses,
       careerGoal: student.careerGoal,
       interestedInGradSchool: student.interestedInGradSchool,
-      riskAssessment: riskAssessment,
-      careerRecommendations: careerRecommendations.slice(0, 3), // Top 3 recommendations
-      remainingCredits: student.totalCreditsNeeded - student.currentCredits
+      riskLevel: riskAssessment.level,
+      riskFactors: riskAssessment.factors,
+      remainingCredits: student.totalCreditsNeeded - student.currentCredits,
+      expectedGraduation: student.expectedGraduation
     };
+
+    // Determine if this is the first message
+    const isFirstMessage = conversationHistory.length === 0;
+    
+    // Build conversation context
+    const conversationContext = conversationHistory.length > 0 
+      ? `\nCONVERSATION HISTORY:\n${conversationHistory.map(msg => 
+          `${msg.role.toUpperCase()}: ${msg.content}`
+        ).join('\n')}\n`
+      : '';
 
     // Construct the prompt
     const prompt = `${ADVISOR_SYSTEM_PROMPT}
 
-CURRENT STUDENT CONTEXT:
-Name: ${studentContext.name}
-Credits: ${studentContext.currentCredits}/${studentContext.totalCreditsNeeded} (${studentContext.remainingCredits} remaining)
-GPA: ${studentContext.currentGPA}
-Semesters Passed: ${studentContext.semestersPassed}
-Expected Graduation: ${studentContext.expectedGraduation}
-Completed Courses: ${studentContext.completedCourses.join(', ')}
-Career Goal: ${studentContext.careerGoal || 'Not specified'}
-Graduate School Interest: ${studentContext.interestedInGradSchool ? 'Yes' : 'No'}
+STUDENT: ${studentContext.name}
+- ${studentContext.currentCredits}/${studentContext.totalCreditsNeeded} credits (${studentContext.remainingCredits} remaining)
+- GPA: ${studentContext.currentGPA}
+- Expected graduation: ${studentContext.expectedGraduation}
+- Career goal: ${studentContext.careerGoal || 'Not specified'}
+- Graduate school interest: ${studentContext.interestedInGradSchool ? 'Yes' : 'No'}
+- Risk level: ${studentContext.riskLevel}
+- Completed: ${studentContext.completedCourses.join(', ')}
 
-RISK ASSESSMENT:
-Level: ${studentContext.riskAssessment.level}
-Score: ${studentContext.riskAssessment.score}/100
-Factors: ${studentContext.riskAssessment.factors.join(', ')}
-Recommendations: ${studentContext.riskAssessment.recommendations.join(', ')}
+${conversationContext}
 
-CAREER RECOMMENDATIONS:
-${studentContext.careerRecommendations.map(rec => `- ${rec.course.code} (${rec.course.title}) - ${rec.reason}`).join('\n')}
+CURRENT QUESTION: ${question}
 
-STUDENT QUESTION: ${question}
+${isFirstMessage ? 
+  'This is your first interaction with this student. Introduce yourself warmly and address their question.' : 
+  'Continue the conversation naturally. No need for greetings - jump straight into helping with their question.'
+}
 
-Please respond as Dr. Sarah Chen, providing specific, actionable advice that references our university policies and course catalog.`;
+Respond as Dr. Sarah Chen:`;
 
     try {
       // Azure OpenAI configuration
@@ -121,8 +131,10 @@ Please respond as Dr. Sarah Chen, providing specific, actionable advice that ref
             { role: 'system', content: ADVISOR_SYSTEM_PROMPT },
             { role: 'user', content: prompt }
           ],
-          max_tokens: 500,
-          temperature: 0.7
+          max_tokens: 800,
+          temperature: 0.7,
+          presence_penalty: 0.1,
+          frequency_penalty: 0.1
         })
       });
 
@@ -135,20 +147,16 @@ Please respond as Dr. Sarah Chen, providing specific, actionable advice that ref
     } catch (error) {
       console.error('GPT Advisory Service Error:', error);
       
-      // Fallback response if OpenAI API fails
-      return `Hello ${student.name}! I'm Dr. Sarah Chen, your academic advisor at Metropolitan University. 
-      
-I'd be happy to help you with your question: "${question}"
+      // Improved fallback response
+      return isFirstMessage 
+        ? `Hello ${student.name}! I'm Dr. Sarah Chen, your academic advisor at Metropolitan University. I'd be happy to help you with your question: "${question}"
 
-Based on your current academic standing:
-- You have ${studentContext.currentCredits} credits out of ${studentContext.totalCreditsNeeded} needed for graduation
-- Your current GPA is ${studentContext.currentGPA}
-- Risk assessment: ${studentContext.riskAssessment.level} level
+I can see you have ${studentContext.currentCredits} credits completed with a ${studentContext.currentGPA} GPA. ${studentContext.riskLevel === 'Red' ? 'I notice some concerns with your current trajectory, but we can definitely work together to get you back on track.' : studentContext.riskLevel === 'Yellow' ? 'You\'re making progress, and with some adjustments we can optimize your path to graduation.' : 'You\'re doing well academically!'}
 
-${studentContext.riskAssessment.recommendations.length > 0 ? 
-  `My immediate recommendations: ${studentContext.riskAssessment.recommendations.join(', ')}` : ''}
+I'm experiencing some technical difficulties right now, but I encourage you to visit during my office hours so we can discuss your academic plan in detail.`
+        : `I understand your concern about "${question}". Based on your current standing (${studentContext.currentCredits} credits, ${studentContext.currentGPA} GPA), there are definitely steps we can take to address this.
 
-Please note: I'm currently experiencing technical difficulties with my AI system. For detailed guidance, please visit my office hours or contact me directly. In the meantime, I recommend checking our course catalog for prerequisite information and speaking with your department advisor.`;
+I'm having some technical issues at the moment, but please don't hesitate to stop by my office so we can create a concrete action plan together.`;
     }
   }
 

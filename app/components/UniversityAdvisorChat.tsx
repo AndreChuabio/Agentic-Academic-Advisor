@@ -74,18 +74,29 @@ export default function UniversityAdvisorChat({ selectedStudent }: UniversityAdv
       timestamp: new Date()
     };
     
-    setMessages(prev => [...prev, studentMessage]);
+    const updatedMessages = [...messages, studentMessage];
+    setMessages(updatedMessages);
     setCurrentMessage('');
     setIsLoading(true);
     setIsTyping(true);
 
     try {
+      // Prepare conversation history (exclude system messages)
+      const conversationHistory = updatedMessages
+        .filter(msg => msg.role === 'student' || msg.role === 'advisor')
+        .slice(-6) // Last 6 messages for context (3 exchanges)
+        .map(msg => ({
+          role: msg.role as 'student' | 'advisor',
+          content: msg.content
+        }));
+
       const response = await fetch('/api/gpt-advisor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           studentId: selectedStudent, 
-          question: message 
+          question: message,
+          conversationHistory: conversationHistory
         })
       });
 
