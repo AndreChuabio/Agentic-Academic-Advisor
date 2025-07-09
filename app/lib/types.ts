@@ -11,6 +11,9 @@ export interface Student {
   expectedGraduation: string;
   completedCourses: string[];
   careerGoal?: string;
+  specializations?: string[];
+  postGradInterest?: string[];
+  interestedInGradSchool?: boolean;
 }
 
 export interface Course {
@@ -32,6 +35,7 @@ export interface Career {
   recommendedCourses: string[];
   averageSalary: number;
   jobGrowth: string;
+  graduatePrograms?: GraduateProgram[];
 }
 
 export interface RiskAssessment {
@@ -54,4 +58,46 @@ export interface ProgressTracking {
   remainingRequirements: string[];
   nextRecommendedCourse: string;
   estimatedCompletionSemesters: number;
+}
+
+export interface GraduateProgram {
+  id: string;
+  title: string;
+  degree: 'MS' | 'PhD';
+  department: string;
+  description: string;
+  duration: string;
+  minGPA: number;
+  requiredCourses: string[];
+  applicationDeadline: string;
+  startDate: string;
+  anonymizedPartner?: string; // Generic partner names
+}
+
+export interface SpecializationTrack {
+  id: string;
+  name: string;
+  department: string;
+  additionalCourses: string[];
+  minGPA: number;
+  careerOutcomes: string[];
+  description: string;
+}
+
+export interface PostGradPathway {
+  id: string;
+  type: 'graduate' | 'exchange' | 'internship';
+  title: string;
+  description: string;
+  eligibilityRequirements: string[];
+  timeline: string;
+  benefits: string[];
+  anonymizedPartner?: string;
+}
+
+export interface EligibilityCheck {
+  isEligible: boolean;
+  missingRequirements: string[];
+  admissionChance: 'High' | 'Medium' | 'Low';
+  recommendations: string[];
 }

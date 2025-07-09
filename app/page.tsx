@@ -5,9 +5,13 @@ import RiskAssessment from './components/RiskAssessment';
 import CourseRecommendations from './components/CourseRecommendations';
 import PrerequisiteVisualization from './components/PrerequisiteVisualization';
 import ProgressTracking from './components/ProgressTracking';
+import GraduatePrograms from './components/GraduatePrograms';
+import SpecializationTracks from './components/SpecializationTracks';
+import PostGradPathways from './components/PostGradPathways';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('risk');
+  const [activePathwayTab, setActivePathwayTab] = useState('programs');
   const [students, setStudents] = useState([]);
   const [careers, setCareers] = useState([]);
 
@@ -26,7 +30,8 @@ export default function Home() {
     { id: 'risk', label: 'Graduation Risk', icon: '⚠️' },
     { id: 'recommendations', label: 'Course Recommendations', icon: '📚' },
     { id: 'prerequisites', label: 'Prerequisites', icon: '🔗' },
-    { id: 'progress', label: 'Progress Tracking', icon: '📊' }
+    { id: 'progress', label: 'Progress Tracking', icon: '📊' },
+    { id: 'pathways', label: 'Graduate Pathways', icon: '🎓' }
   ];
 
   return (
@@ -74,6 +79,50 @@ export default function Home() {
         {activeTab === 'recommendations' && <CourseRecommendations careers={careers} students={students} />}
         {activeTab === 'prerequisites' && <PrerequisiteVisualization />}
         {activeTab === 'progress' && <ProgressTracking students={students} careers={careers} />}
+        {activeTab === 'pathways' && (
+          <div className="space-y-6">
+            {/* Pathways Sub-Navigation */}
+            <div className="bg-white rounded-lg shadow-sm border p-4">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setActivePathwayTab('programs')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    activePathwayTab === 'programs'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🎓 Graduate Programs
+                </button>
+                <button
+                  onClick={() => setActivePathwayTab('specializations')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    activePathwayTab === 'specializations'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🎯 Specializations
+                </button>
+                <button
+                  onClick={() => setActivePathwayTab('pathways')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    activePathwayTab === 'pathways'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  🚀 Post-Grad Options
+                </button>
+              </div>
+            </div>
+            
+            {/* Pathways Content */}
+            {activePathwayTab === 'programs' && <GraduatePrograms students={students} />}
+            {activePathwayTab === 'specializations' && <SpecializationTracks students={students} />}
+            {activePathwayTab === 'pathways' && <PostGradPathways students={students} />}
+          </div>
+        )}
       </main>
 
       {/* Footer */}

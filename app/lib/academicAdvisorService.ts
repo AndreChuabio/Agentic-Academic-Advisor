@@ -205,6 +205,54 @@ export class AcademicAdvisorService {
     };
   }
 
+  // Feature 5: Graduate Pathway Recommendations
+  static getGraduatePathwayRecommendations(studentId: string): {
+    graduatePrograms: any[];
+    specializations: any[];
+    postGradPathways: any[];
+    overallRecommendation: string;
+  } {
+    const student = mockStudents.find(s => s.id === studentId);
+    if (!student) {
+      throw new Error('Student not found');
+    }
+
+    // Import services dynamically to avoid circular dependencies
+    const { GraduateProgramService } = require('./graduateProgramService');
+    const { SpecializationService } = require('./specializationService');
+    const { mockPostGradPathways } = require('./mockData');
+
+    const graduatePrograms = GraduateProgramService.getRecommendedPrograms(studentId);
+    const specializations = SpecializationService.getRecommendedSpecializations(studentId);
+    
+    // Filter relevant post-grad pathways
+    const postGradPathways = mockPostGradPathways.filter((pathway: any) => {
+      if (student.interestedInGradSchool && pathway.type === 'graduate') return true;
+      if (student.currentGPA >= 3.2 && pathway.type === 'exchange') return true;
+      if (pathway.type === 'internship') return true;
+      return false;
+    });
+
+    // Generate overall recommendation
+    let overallRecommendation = '';
+    if (student.currentGPA >= 3.5) {
+      overallRecommendation = 'Excellent academic performance - consider graduate school and research opportunities';
+    } else if (student.currentGPA >= 3.0) {
+      overallRecommendation = 'Good academic standing - explore specializations and graduate preparation';
+    } else if (student.currentGPA >= 2.5) {
+      overallRecommendation = 'Focus on improving GPA while exploring practical pathways and internships';
+    } else {
+      overallRecommendation = 'Prioritize academic improvement and consider alternative pathways';
+    }
+
+    return {
+      graduatePrograms,
+      specializations,
+      postGradPathways,
+      overallRecommendation
+    };
+  }
+
   // Helper methods
   static getAllStudents(): Student[] {
     return mockStudents;
