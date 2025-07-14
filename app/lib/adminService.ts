@@ -1,5 +1,5 @@
-import { Student } from './types';
-import { mockStudents } from './mockData';
+import { Student, Course, GraduateProgram } from './types';
+import { mockStudents, mockCourses, mockGraduatePrograms } from './mockData';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -8,6 +8,8 @@ export interface ValidationResult {
 
 export class AdminService {
   private static students: Student[] = [...mockStudents];
+  private static courses: Course[] = [...mockCourses];
+  private static graduatePrograms: GraduateProgram[] = [...mockGraduatePrograms];
 
   static getStudents(): Student[] {
     return [...this.students];
@@ -150,6 +152,172 @@ export class AdminService {
 
   static resetToMockData(): void {
     this.students = [...mockStudents];
+  }
+
+  // Course Management Methods (POC Level)
+  static getAllCourses(): Course[] {
+    return [...this.courses];
+  }
+
+  static createCourse(course: Course): Course {
+    const newCourse: Course = {
+      ...course,
+      id: `CS${(this.courses.length + 1).toString().padStart(3, '0')}`
+    };
+    
+    this.courses.push(newCourse);
+    return newCourse;
+  }
+
+  static updateCourse(id: string, updates: Partial<Course>): Course | null {
+    const index = this.courses.findIndex(course => course.id === id);
+    if (index === -1) return null;
+
+    this.courses[index] = { ...this.courses[index], ...updates };
+    return this.courses[index];
+  }
+
+  static deleteCourse(id: string): boolean {
+    const index = this.courses.findIndex(course => course.id === id);
+    if (index === -1) return false;
+
+    this.courses.splice(index, 1);
+    return true;
+  }
+
+  static exportCourses(): string {
+    // Simple CSV export for POC
+    const headers = ['ID', 'Code', 'Title', 'Credits', 'Department', 'Prerequisites', 'Description', 'Difficulty'];
+    const rows = this.courses.map(course => [
+      course.id,
+      course.code,
+      course.title,
+      course.credits.toString(),
+      course.department,
+      course.prerequisites.join(';'),
+      course.description,
+      course.difficulty
+    ]);
+    
+    return [headers, ...rows].map(row => row.join(',')).join('\n');
+  }
+
+  // Graduate Program Management Methods (POC Level)
+  static getAllGraduatePrograms(): GraduateProgram[] {
+    return [...this.graduatePrograms];
+  }
+
+  static createGraduateProgram(program: GraduateProgram): GraduateProgram {
+    const newProgram: GraduateProgram = {
+      ...program,
+      id: `GRAD${(this.graduatePrograms.length + 1).toString().padStart(3, '0')}`
+    };
+    
+    this.graduatePrograms.push(newProgram);
+    return newProgram;
+  }
+
+  static updateGraduateProgram(id: string, updates: Partial<GraduateProgram>): GraduateProgram | null {
+    const index = this.graduatePrograms.findIndex(program => program.id === id);
+    if (index === -1) return null;
+
+    this.graduatePrograms[index] = { ...this.graduatePrograms[index], ...updates };
+    return this.graduatePrograms[index];
+  }
+
+  static deleteGraduateProgram(id: string): boolean {
+    const index = this.graduatePrograms.findIndex(program => program.id === id);
+    if (index === -1) return false;
+
+    this.graduatePrograms.splice(index, 1);
+    return true;
+  }
+
+  static exportGraduatePrograms(): string {
+    // Simple CSV export for POC
+    const headers = ['ID', 'Title', 'Degree', 'Department', 'Description', 'Duration', 'Min GPA', 'Required Courses', 'Application Deadline', 'Start Date'];
+    const rows = this.graduatePrograms.map(program => [
+      program.id,
+      program.title,
+      program.degree,
+      program.department,
+      program.description,
+      program.duration,
+      program.minGPA.toString(),
+      program.requiredCourses.join(';'),
+      program.applicationDeadline,
+      program.startDate
+    ]);
+    
+    return [headers, ...rows].map(row => row.join(',')).join('\n');
+  }
+
+  // Basic Validation Utilities (POC Level)
+  static validateCourseData(course: Course): ValidationResult {
+    const errors: string[] = [];
+
+    if (!course.code || course.code.trim().length < 2) {
+      errors.push('Course code must be at least 2 characters long');
+    }
+
+    if (!course.title || course.title.trim().length < 3) {
+      errors.push('Course title must be at least 3 characters long');
+    }
+
+    if (!course.credits || course.credits < 1 || course.credits > 6) {
+      errors.push('Course credits must be between 1 and 6');
+    }
+
+    if (!course.department || course.department.trim().length < 2) {
+      errors.push('Department must be specified');
+    }
+
+    if (!['Easy', 'Medium', 'Hard'].includes(course.difficulty)) {
+      errors.push('Difficulty must be Easy, Medium, or Hard');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+
+  static validateGraduateProgramData(program: GraduateProgram): ValidationResult {
+    const errors: string[] = [];
+
+    if (!program.title || program.title.trim().length < 3) {
+      errors.push('Program title must be at least 3 characters long');
+    }
+
+    if (!['MS', 'PhD'].includes(program.degree)) {
+      errors.push('Degree must be MS or PhD');
+    }
+
+    if (!program.department || program.department.trim().length < 2) {
+      errors.push('Department must be specified');
+    }
+
+    if (!program.minGPA || program.minGPA < 2.0 || program.minGPA > 4.0) {
+      errors.push('Minimum GPA must be between 2.0 and 4.0');
+    }
+
+    if (!program.duration || program.duration.trim().length < 3) {
+      errors.push('Duration must be specified');
+    }
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+
+  // Reset Methods for POC Testing
+  static resetCoursesToMockData(): void {
+    this.courses = [...mockCourses];
+  }
+
+  static resetGraduateProgramsToMockData(): void {
+    this.graduatePrograms = [...mockGraduatePrograms];
   }
 
   private static isValidEmail(email: string): boolean {

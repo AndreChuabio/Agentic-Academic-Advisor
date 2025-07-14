@@ -2,21 +2,30 @@
 
 import { useState } from 'react';
 import { AdminService } from '../../lib/adminService';
-import { Student } from '../../lib/types';
+import { Student, Course, GraduateProgram } from '../../lib/types';
 
 interface DataUploaderProps {
   onImportSuccess: () => void;
   students: Student[];
+  courses?: Course[];
+  graduatePrograms?: GraduateProgram[];
+  dataType?: 'students' | 'courses' | 'graduatePrograms';
 }
 
-export default function DataUploader({ onImportSuccess, students }: DataUploaderProps) {
+export default function DataUploader({ 
+  onImportSuccess, 
+  students, 
+  courses = [], 
+  graduatePrograms = [], 
+  dataType = 'students' 
+}: DataUploaderProps) {
   const [dragActive, setDragActive] = useState(false);
   const [importData, setImportData] = useState('');
   const [importFormat, setImportFormat] = useState<'json' | 'csv'>('json');
   const [importError, setImportError] = useState('');
   const [importSuccess, setImportSuccess] = useState('');
   const [showPreview, setShowPreview] = useState(false);
-  const [previewData, setPreviewData] = useState<Student[]>([]);
+  const [previewData, setPreviewData] = useState<any[]>([]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -112,12 +121,25 @@ export default function DataUploader({ onImportSuccess, students }: DataUploader
 
   const handleExport = (format: 'json' | 'csv') => {
     try {
-      const data = AdminService.exportStudents(format);
+      let data: string;
+      let filename: string;
+
+      if (dataType === 'courses') {
+        data = format === 'json' ? JSON.stringify(courses, null, 2) : AdminService.exportCourses();
+        filename = `courses.${format}`;
+      } else if (dataType === 'graduatePrograms') {
+        data = format === 'json' ? JSON.stringify(graduatePrograms, null, 2) : AdminService.exportGraduatePrograms();
+        filename = `graduate-programs.${format}`;
+      } else {
+        data = AdminService.exportStudents(format);
+        filename = `students.${format}`;
+      }
+
       const blob = new Blob([data], { type: format === 'json' ? 'application/json' : 'text/csv' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `students.${format}`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -128,11 +150,36 @@ export default function DataUploader({ onImportSuccess, students }: DataUploader
   };
 
   const handleResetData = () => {
-    if (window.confirm('Are you sure you want to reset all student data to the original mock data? This cannot be undone.')) {
-      AdminService.resetToMockData();
+    const dataTypeLabel = dataType === 'courses' ? 'course' : 
+                          dataType === 'graduatePrograms' ? 'graduate program' : 'student';
+    
+    if (window.confirm(`Are you sure you want to reset all ${dataTypeLabel} data to the original mock data? This cannot be undone.`)) {
+      if (dataType === 'courses') {
+        AdminService.resetCoursesToMockData();
+      } else if (dataType === 'graduatePrograms') {
+        AdminService.resetGraduateProgramsToMockData();
+      } else {
+        AdminService.resetToMockData();
+      }
       onImportSuccess();
-      setImportSuccess('Data reset to original mock data');
+      setImportSuccess(`${dataTypeLabel.charAt(0).toUpperCase() + dataTypeLabel.slice(1)} data reset to original mock data`);
       setTimeout(() => setImportSuccess(''), 3000);
+    }
+  };
+
+  const getDataTypeLabel = () => {
+    switch (dataType) {
+      case 'courses': return 'Course';
+      case 'graduatePrograms': return 'Graduate Program';
+      default: return 'Student';
+    }
+  };
+
+  const getDataTypeLabelPlural = () => {
+    switch (dataType) {
+      case 'courses': return 'Courses';
+      case 'graduatePrograms': return 'Graduate Programs';
+      default: return 'Students';
     }
   };
 
@@ -140,7 +187,7 @@ export default function DataUploader({ onImportSuccess, students }: DataUploader
     <div className="space-y-6">
       {/* Export Section */}
       <div className="bg-white rounded-lg shadow-sm border p-6">
-        <h3 className="text-lg font-semibold mb-4">Export Student Data</h3>
+        <h3 className="text-lg font-semibold mb-4">Export {getDataTypeLabel()} Data</h3>
         <p className="text-gray-600 mb-4">Download current student data in JSON or CSV format.</p>
         
         <div className="flex space-x-4">

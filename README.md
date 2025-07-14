@@ -4,6 +4,9 @@
 
 This is a **Proof of Concept (POC)** for an AI-powered Academic Advisor system that demonstrates how artificial intelligence can help students avoid late graduations and make better academic choices. The system provides early warning risk assessments, personalized course recommendations, prerequisite visualizations, and career progress tracking.
 
+**🆕 NEW: Admin Management Extension**
+The POC now includes a comprehensive administrative interface for managing courses and graduate programs. See `ADMIN_EXTENSION_README.md` for detailed documentation of the new admin capabilities.
+
 ## 🚀 Key Features
 
 ### 1. Graduation Risk Assessment ⚠️
@@ -29,6 +32,18 @@ This is a **Proof of Concept (POC)** for an AI-powered Academic Advisor system t
 - **Input**: Student ID + Career Goal
 - **Output**: Progress percentage, completion status, and next steps
 - **Algorithm**: Calculates completion based on required courses
+
+### 5. Post-Graduation Pathways 🎯
+- **Purpose**: Explore graduate school and career opportunities
+- **Input**: Student academic profile
+- **Output**: Recommended pathways with eligibility assessment
+- **Algorithm**: Matches student qualifications to opportunities
+
+### 6. Administrative Interface 🔧 **NEW**
+- **Purpose**: Comprehensive data management for courses and graduate programs
+- **Input**: Administrative credentials and data
+- **Output**: Full CRUD operations with validation and export capabilities
+- **Features**: Course management, graduate program administration, bulk data operations
 
 ## 🛠 Technical Stack
 
@@ -108,6 +123,8 @@ npm start
 | `/api/progress-tracking` | GET | Get career progress tracking |
 | `/api/students` | GET | Get all students |
 | `/api/careers` | GET | Get all careers |
+| `/api/graduate-programs` | GET | Get graduate programs **NEW** |
+| `/api/specializations` | GET | Get specialization tracks **NEW** |
 
 ### Example API Calls:
 ```bash
@@ -128,25 +145,46 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 
 ```
 ├── app/
+│   ├── admin/                  # Admin interface **NEW**
+│   │   ├── page.tsx           # Admin dashboard
+│   │   └── components/        # Admin components
+│   │       ├── CourseTable.tsx
+│   │       ├── DataUploader.tsx
+│   │       ├── GraduateProgramTable.tsx
+│   │       ├── StudentForm.tsx
+│   │       └── StudentTable.tsx
 │   ├── api/                    # API routes
 │   │   ├── careers/
 │   │   ├── course-recommendations/
+│   │   ├── graduate-programs/  # **NEW**
+│   │   ├── pathways/          # **NEW**
 │   │   ├── prerequisites/
 │   │   ├── progress-tracking/
 │   │   ├── risk-assessment/
+│   │   ├── specializations/   # **NEW**
 │   │   └── students/
 │   ├── components/             # React components
 │   │   ├── CourseRecommendations.tsx
+│   │   ├── GraduatePrograms.tsx     # **NEW**
+│   │   ├── PostGradPathways.tsx     # **NEW**
 │   │   ├── PrerequisiteVisualization.tsx
 │   │   ├── ProgressTracking.tsx
-│   │   └── RiskAssessment.tsx
+│   │   ├── RiskAssessment.tsx
+│   │   ├── SpecializationTracks.tsx # **NEW**
+│   │   └── UniversityAdvisorChat.tsx # **NEW**
 │   ├── lib/                    # Utility libraries
 │   │   ├── academicAdvisorService.ts
+│   │   ├── adminContext.tsx    # **NEW**
+│   │   ├── adminService.ts     # **NEW**
+│   │   ├── graduateProgramService.ts # **NEW**
+│   │   ├── gptAdvisoryService.ts # **NEW**
 │   │   ├── mockData.ts
+│   │   ├── specializationService.ts # **NEW**
 │   │   └── types.ts
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx               # Main dashboard
+├── ADMIN_EXTENSION_README.md  # Admin documentation **NEW**
 ├── DEMO_SCRIPT.md             # 5-minute demo script
 └── README.md
 ```
