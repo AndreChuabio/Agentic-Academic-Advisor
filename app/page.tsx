@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import RiskAssessment from './components/RiskAssessment';
 import CourseRecommendations from './components/CourseRecommendations';
 import PrerequisiteVisualization from './components/PrerequisiteVisualization';
@@ -9,6 +10,8 @@ import GraduatePrograms from './components/GraduatePrograms';
 import SpecializationTracks from './components/SpecializationTracks';
 import PostGradPathways from './components/PostGradPathways';
 import UniversityAdvisorChat from './components/UniversityAdvisorChat';
+import AdminToggle from './components/AdminToggle';
+import { useAdmin } from './lib/adminContext';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('risk');
@@ -16,6 +19,8 @@ export default function Home() {
   const [students, setStudents] = useState([]);
   const [careers, setCareers] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState('');
+  const { isAdminMode } = useAdmin();
+  const router = useRouter();
 
   useEffect(() => {
     // Fetch initial data
@@ -28,6 +33,13 @@ export default function Home() {
     });
   }, []);
 
+  // Redirect to admin page when admin mode is enabled
+  useEffect(() => {
+    if (isAdminMode) {
+      router.push('/admin');
+    }
+  }, [isAdminMode, router]);
+
   const tabs = [
     { id: 'risk', label: 'Graduation Risk', icon: '⚠️' },
     { id: 'recommendations', label: 'Course Recommendations', icon: '📚' },
@@ -39,6 +51,13 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Admin Mode Indicator */}
+      {isAdminMode && (
+        <div className="bg-orange-500 text-white text-center py-2 text-sm font-medium">
+          🔧 ADMINISTRATOR MODE ACTIVE - Managing Student Data
+        </div>
+      )}
+      
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,8 +66,11 @@ export default function Home() {
               <h1 className="text-2xl font-bold text-gray-900">AI Academic Advisor</h1>
               <span className="ml-2 px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">POC</span>
             </div>
-            <div className="text-sm text-gray-500">
-              Early Warning System • Personalized Guidance • Career Planning
+            <div className="flex items-center space-x-4">
+              <div className="text-sm text-gray-500">
+                Early Warning System • Personalized Guidance • Career Planning
+              </div>
+              <AdminToggle />
             </div>
           </div>
         </div>
