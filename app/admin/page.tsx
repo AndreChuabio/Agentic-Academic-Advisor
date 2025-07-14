@@ -7,14 +7,19 @@ import { AdminService } from '../lib/adminService';
 import StudentTable from './components/StudentTable';
 import StudentForm from './components/StudentForm';
 import DataUploader from './components/DataUploader';
-import { Student } from '../lib/types';
+import CourseTable from './components/CourseTable';
+import GraduateProgramTable from './components/GraduateProgramTable';
+import DataUploaderExtended from './components/DataUploaderExtended';
+import { Student, Course, GraduateProgram } from '../lib/types';
 
 export default function AdminPage() {
   const { isAdminMode, isAuthenticated, setIsAdminMode } = useAdmin();
   const [students, setStudents] = useState<Student[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [graduatePrograms, setGraduatePrograms] = useState<GraduateProgram[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
-  const [activeSection, setActiveSection] = useState<'students' | 'upload'>('students');
+  const [activeSection, setActiveSection] = useState<'students' | 'courses' | 'graduatePrograms' | 'upload'>('students');
   const router = useRouter();
 
   // Redirect if not in admin mode
@@ -24,10 +29,12 @@ export default function AdminPage() {
     }
   }, [isAuthenticated, isAdminMode, router]);
 
-  // Load students data
+  // Load data
   useEffect(() => {
     if (isAuthenticated && isAdminMode) {
       setStudents(AdminService.getStudents());
+      setCourses(AdminService.getAllCourses());
+      setGraduatePrograms(AdminService.getAllGraduatePrograms());
     }
   }, [isAuthenticated, isAdminMode]);
 
@@ -69,6 +76,8 @@ export default function AdminPage() {
 
   const handleImportSuccess = () => {
     setStudents(AdminService.getStudents());
+    setCourses(AdminService.getAllCourses());
+    setGraduatePrograms(AdminService.getAllGraduatePrograms());
   };
 
   const handleExitAdmin = () => {
@@ -80,7 +89,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Admin Header */}
       <div className="bg-orange-500 text-white text-center py-2 text-sm font-medium">
-        🔧 ADMINISTRATOR MODE - Student Data Management System
+        🔧 ADMINISTRATOR MODE - Course & Graduate Program Management System
       </div>
       
       <header className="bg-white shadow-sm border-b">
@@ -88,9 +97,17 @@ export default function AdminPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-              <span className="ml-2 px-2 py-1 text-xs bg-orange-100 text-orange-800 rounded-full">
-                {students.length} Students
-              </span>
+              <div className="ml-4 flex space-x-2">
+                <span className="px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded-full">
+                  {students.length} Students
+                </span>
+                <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded-full">
+                  {courses.length} Courses
+                </span>
+                <span className="px-2 py-1 text-xs bg-purple-100 text-purple-800 rounded-full">
+                  {graduatePrograms.length} Programs
+                </span>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
               <button
@@ -116,7 +133,27 @@ export default function AdminPage() {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              👥 Student Management
+              👥 Students
+            </button>
+            <button
+              onClick={() => setActiveSection('courses')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                activeSection === 'courses'
+                  ? 'border-orange-500 text-orange-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              📚 Courses
+            </button>
+            <button
+              onClick={() => setActiveSection('graduatePrograms')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                activeSection === 'graduatePrograms'
+                  ? 'border-orange-500 text-orange-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              🎓 Graduate Programs
             </button>
             <button
               onClick={() => setActiveSection('upload')}
@@ -183,10 +220,34 @@ export default function AdminPage() {
           </div>
         )}
 
+        {activeSection === 'courses' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Course Management</h2>
+            <CourseTable
+              onImportSuccess={() => {
+                setCourses(AdminService.getAllCourses());
+                handleImportSuccess();
+              }}
+            />
+          </div>
+        )}
+
+        {activeSection === 'graduatePrograms' && (
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold text-gray-900">Graduate Program Management</h2>
+            <GraduateProgramTable
+              onImportSuccess={() => {
+                setGraduatePrograms(AdminService.getAllGraduatePrograms());
+                handleImportSuccess();
+              }}
+            />
+          </div>
+        )}
+
         {activeSection === 'upload' && (
           <div className="space-y-6">
             <h2 className="text-xl font-semibold text-gray-900">Data Import/Export</h2>
-            <DataUploader onImportSuccess={handleImportSuccess} students={students} />
+            <DataUploaderExtended onImportSuccess={handleImportSuccess} />
           </div>
         )}
       </main>
