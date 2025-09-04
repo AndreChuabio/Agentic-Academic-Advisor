@@ -1,0 +1,13 @@
+services:
+  ai-academic-advisor:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # Uncomment and set these if you want to use real AI features
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      # - AZURE_OPENAI_DEPLOYMENT_NAME=${AZURE_OPENAI_DEPLOYMENT_NAME}
+      # - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION}
+    restart: unless-stopped

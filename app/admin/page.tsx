@@ -55,8 +55,30 @@ export default function AdminPage() {
     );
   }
 
-  const handleAddStudent = (studentData: Omit<Student, 'id'>) => {
-    const newStudent = AdminService.addStudent(studentData);
+  const handleAddStudent = (studentData: Omit<Student, 'id'> | Partial<Student>) => {
+    // Ensure we have the required fields for a new student
+    if (!studentData.name || !studentData.email) {
+      console.error('Name and email are required for new students');
+      return;
+    }
+    
+    // Create complete student data with defaults for missing fields
+    const completeStudentData: Omit<Student, 'id'> = {
+      name: studentData.name,
+      email: studentData.email,
+      currentCredits: studentData.currentCredits ?? 0,
+      totalCreditsNeeded: studentData.totalCreditsNeeded ?? 120,
+      currentGPA: studentData.currentGPA ?? 0.0,
+      semestersPassed: studentData.semestersPassed ?? 0,
+      expectedGraduation: studentData.expectedGraduation ?? '',
+      completedCourses: studentData.completedCourses ?? [],
+      careerGoal: studentData.careerGoal ?? '',
+      specializations: studentData.specializations ?? [],
+      postGradInterest: studentData.postGradInterest ?? [],
+      interestedInGradSchool: studentData.interestedInGradSchool ?? false
+    };
+    
+    const newStudent = AdminService.addStudent(completeStudentData);
     setStudents(AdminService.getStudents());
     setShowAddForm(false);
   };

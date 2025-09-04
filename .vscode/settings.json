@@ -1,0 +1,9 @@
+{
+    "appService.connections": [],
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/2cb9f049-0a82-4a53-9b2c-047cca6f3878/resourceGroups/palo-sg-presales/providers/Microsoft.Web/sites/AI-Academic-Advisor",
+    "appService.deploySubpath": "."
+}
