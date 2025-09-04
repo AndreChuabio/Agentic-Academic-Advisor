@@ -60,6 +60,28 @@ The POC now includes a comprehensive administrative interface for managing cours
 - npm or yarn package manager
 
 ### Installation
+
+#### Option 1: Docker (Recommended for Easy Setup)
+The easiest way to run the AI Academic Advisor:
+
+1. **Prerequisites**: Install [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/)
+
+2. **Clone the repository**:
+   ```bash
+   git clone https://github.com/AchuabioPALO/AI-Academic-Advisor.git
+   cd AI-Academic-Advisor
+   ```
+
+3. **Run with Docker Compose**:
+   ```bash
+   docker-compose up --build
+   ```
+
+4. **Open browser to `http://localhost:3000`**
+
+That's it! The application will be running in a containerized environment with all dependencies included.
+
+#### Option 2: Local Development
 1. Clone the repository
 2. Install dependencies:
    ```bash
@@ -77,6 +99,18 @@ The POC now includes a comprehensive administrative interface for managing cours
 ```bash
 npm run build
 npm start
+```
+
+### Docker Commands
+```bash
+# Build the Docker image
+docker build -t ai-academic-advisor .
+
+# Run the container
+docker run -p 3000:3000 ai-academic-advisor
+
+# Or use Docker Compose (recommended)
+docker-compose up --build
 ```
 
 ## 🎭 Demo Scenarios

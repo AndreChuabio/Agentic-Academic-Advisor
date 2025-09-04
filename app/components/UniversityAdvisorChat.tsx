@@ -30,7 +30,7 @@ export default function UniversityAdvisorChat({ selectedStudent }: UniversityAdv
 
   useEffect(() => {
     // Reset chat when student changes
-    if (selectedStudent) {
+    if (selectedStudent && typeof window !== 'undefined') {
       setMessages([{
         role: 'advisor',
         content: `Hello! I'm Dr. Sarah Chen, your academic advisor at Metropolitan University. I'm here to help you with course planning, graduation requirements, career guidance, and any other academic questions you might have. How can I assist you today?`,
@@ -43,7 +43,7 @@ export default function UniversityAdvisorChat({ selectedStudent }: UniversityAdv
   }, [selectedStudent]);
 
   const loadSuggestedQuestions = async () => {
-    if (!selectedStudent) return;
+    if (!selectedStudent || typeof window === 'undefined') return;
     
     try {
       const response = await fetch('/api/gpt-advisor', {
@@ -61,11 +61,19 @@ export default function UniversityAdvisorChat({ selectedStudent }: UniversityAdv
       }
     } catch (error) {
       console.error('Error loading suggested questions:', error);
+      // Set default questions if API fails
+      setSuggestedQuestions([
+        "What courses should I take next semester?",
+        "Am I on track to graduate on time?",
+        "What career opportunities are available with my major?",
+        "How can I improve my GPA?",
+        "What are the prerequisites for advanced courses in my field?"
+      ]);
     }
   };
 
   const sendMessage = async (message: string) => {
-    if (!message.trim() || !selectedStudent) return;
+    if (!message.trim() || !selectedStudent || typeof window === 'undefined') return;
 
     // Add student message
     const studentMessage: AdvisorMessage = {

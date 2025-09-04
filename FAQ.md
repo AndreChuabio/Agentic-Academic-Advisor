@@ -9,6 +9,10 @@
 6. [Post-Graduation Pathways](#post-graduation-pathways)
 7. [Student-Specific Examples](#student-specific-examples)
 8. [Technical Implementation](#technical-implementation)
+9. [**NEW: Admin Management System**](#admin-management-system) 🆕
+10. [**NEW: AI Academic Advisor Chat**](#ai-academic-advisor-chat) 🆕
+11. [**NEW: Azure Deployment & Configuration**](#azure-deployment--configuration) 🆕
+12. [**NEW: Data Import/Export Features**](#data-importexport-features) 🆕
 
 ---
 
@@ -16,6 +20,8 @@
 
 ### Q: What is the AI Academic Advisor POC?
 **A:** This is a Proof of Concept (POC) demonstrating how artificial intelligence can help university students navigate their academic journey, prevent late graduations, and plan for post-graduation opportunities. It provides personalized guidance based on student performance, career goals, and academic progress.
+
+**🆕 NEW: Admin Extension** - The POC now includes a comprehensive administrative interface for managing courses and graduate programs, plus an AI-powered chat advisor.
 
 ### Q: What data does the system use?
 **A:** The POC uses mock data for 5 fictional students with realistic academic profiles:
@@ -213,7 +219,9 @@
 1. **AcademicAdvisorService**: Core risk assessment and recommendations
 2. **GraduateProgramService**: Graduate program eligibility and matching
 3. **SpecializationService**: Specialization track recommendations
-4. **API Endpoints**: RESTful services for data retrieval
+4. **GPTAdvisoryService**: AI-powered academic advice **NEW**
+5. **AdminService**: Administrative data management **NEW**
+6. **API Endpoints**: RESTful services for data retrieval
 
 ### Q: How real-time is the data?
 **A:** This is a POC with static mock data. In a production system, data would be:
@@ -240,6 +248,209 @@ Production versions would support various academic structures.
 
 ---
 
+## 🆕 Admin Management System
+
+### Q: What is the Admin Management System?
+**A:** A comprehensive administrative interface added in the latest update that allows university staff to manage institutional data through a secure, user-friendly interface.
+
+### Q: How do I access Admin Mode?
+**A:** 
+1. Click the "Admin" toggle button in the top navigation
+2. Enter the admin password (`admin123` for POC)
+3. The interface will switch to admin mode with an orange header bar
+
+### Q: What can I do in Admin Mode?
+**A:** The admin interface provides four main sections:
+
+**👥 Students Management:**
+- View all student records in a sortable table
+- Add new students with comprehensive form validation
+- Edit existing student information inline
+- Delete student records (with confirmation)
+- Export student data to CSV/JSON
+
+**📚 Course Management:**
+- View and manage course catalog
+- Add new courses with prerequisite tracking
+- Edit course information and requirements
+- Delete courses from catalog
+- Manage course difficulty levels and credit hours
+
+**🎓 Graduate Program Management:**
+- Manage MS and PhD programs
+- Set admission requirements and GPA thresholds
+- Configure required courses for each program
+- Track application deadlines and start dates
+- Manage program descriptions and durations
+
+**📤 Data Import/Export:**
+- Bulk import data via CSV files
+- Download CSV templates for proper formatting
+- Export current data for backup
+- Reset to original mock data
+
+### Q: Is admin mode data persistent?
+**A:** No, the admin mode operates on runtime-only data for POC purposes. All changes are lost when the application restarts. This is a safety feature to prevent data corruption during demos.
+
+### Q: What validation is performed on admin data?
+**A:** Comprehensive validation includes:
+- **Student data**: Name, email format, GPA ranges (0-4.0), credit limits
+- **Course data**: Course codes, credit hours (1-6), difficulty levels
+- **Graduate programs**: GPA requirements (2.0-4.0), valid degree types (MS/PhD)
+- **File imports**: CSV format validation, data integrity checks
+
+---
+
+## 🆕 AI Academic Advisor Chat
+
+### Q: What is the AI Academic Advisor Chat feature?
+**A:** An interactive chat interface where students can have natural conversations with "Dr. Sarah Chen," an AI-powered academic advisor that provides personalized guidance.
+
+### Q: How does the AI advisor work?
+**A:** The AI advisor:
+- Uses Azure OpenAI (GPT-4) for natural language processing
+- Maintains conversation context across multiple exchanges
+- Provides personalized advice based on student academic profiles
+- Suggests relevant follow-up questions
+- Integrates with risk assessment and recommendation systems
+
+### Q: What kind of questions can I ask the AI advisor?
+**A:** Students can ask about:
+- Course selection and planning
+- Graduation timeline concerns
+- Career guidance and preparation
+- Graduate school readiness
+- Academic improvement strategies
+- Prerequisite planning
+- GPA improvement advice
+
+### Q: How does the AI advisor know about student information?
+**A:** The AI advisor accesses:
+- Student academic records (GPA, completed courses, credits)
+- Risk assessment data
+- Career goals and interests
+- Graduate school aspirations
+- Current semester progress
+
+### Q: What happens if the AI service is unavailable?
+**A:** The system provides graceful fallbacks:
+- Displays friendly error messages
+- Suggests contacting the advisor during office hours
+- Provides default suggested questions
+- Maintains conversation history when service resumes
+
+### Q: Is the AI advisor available 24/7?
+**A:** In the POC, the AI advisor is available whenever the application is running and Azure OpenAI API is accessible. Production systems would have monitoring and availability guarantees.
+
+---
+
+## 🆕 Azure Deployment & Configuration
+
+### Q: Is the system deployed to Azure?
+**A:** Yes, the POC has been configured for Azure App Service deployment with integrated Azure OpenAI services.
+
+### Q: What Azure services are used?
+**A:** The current configuration includes:
+- **Azure App Service**: Web application hosting
+- **Azure OpenAI**: AI-powered chat advisor functionality
+- **Azure Key Vault**: Secure configuration management (environment variables)
+
+### Q: How is the Azure OpenAI integration configured?
+**A:** The integration uses:
+- Azure OpenAI endpoint: `https://palo-sg-presales.openai.azure.com`
+- GPT-4.1-mini deployment for chat responses
+- API version 2024-02-01
+- Environment variable configuration for security
+
+### Q: What environment variables are required for deployment?
+**A:** Key environment variables:
+```
+OPENAI_API_KEY or AZURE_OPENAI_KEY
+AZURE_OPENAI_ENDPOINT
+AZURE_OPENAI_DEPLOYMENT_NAME
+AZURE_OPENAI_API_VERSION
+```
+
+### Q: How does the system handle Azure API failures?
+**A:** The system includes:
+- Graceful error handling for API timeouts
+- Fallback responses when Azure OpenAI is unavailable
+- User-friendly error messages
+- Automatic retry mechanisms for transient failures
+
+### Q: What are the deployment requirements?
+**A:** For Azure deployment:
+- Node.js 18+ runtime
+- Next.js 15 framework support
+- Environment variable configuration
+- Azure OpenAI service access
+- App Service with appropriate pricing tier
+
+---
+
+## 🆕 Data Import/Export Features
+
+### Q: What data import/export capabilities are available?
+**A:** The enhanced data management system supports:
+
+**Import Features:**
+- CSV file upload for students, courses, and graduate programs
+- Template download for proper formatting
+- Real-time validation during import
+- Error reporting with detailed feedback
+- Batch processing with success/error counts
+
+**Export Features:**
+- CSV export of all data types
+- JSON export for student data
+- Downloadable templates for import formatting
+- Data backup capabilities
+
+### Q: What CSV format is required for imports?
+**A:** Each data type has specific formats:
+
+**Students CSV:**
+```
+id,name,email,year,major,gpa,completedCourses
+STU001,John Doe,john.doe@email.com,3,Computer Science,3.5,CS101;CS102
+```
+
+**Courses CSV:**
+```
+code,title,credits,department,prerequisites,description,difficulty
+CS101,Introduction to Computer Science,3,Computer Science,,Basic programming,Easy
+```
+
+**Graduate Programs CSV:**
+```
+title,degree,department,description,duration,minGPA,requiredCourses,applicationDeadline,startDate
+Master of Computer Science,MS,Computer Science,Advanced CS program,2 years,3.0,CS501;CS502,2024-03-15,2024-08-15
+```
+
+### Q: How does the template download feature work?
+**A:** Templates provide:
+- Proper CSV headers for each data type
+- Example data rows for reference
+- Correct formatting for array fields (semicolon-separated)
+- Validation-ready formats
+
+### Q: What happens during data import validation?
+**A:** The system validates:
+- CSV format and structure
+- Required fields presence
+- Data type correctness (numbers, emails, dates)
+- Value ranges (GPA 0-4.0, credits 1-6)
+- Array field formatting (prerequisites, completed courses)
+
+### Q: Can I reset data to original state?
+**A:** Yes, the reset functionality:
+- Restores original mock data for any data type
+- Provides confirmation dialogs for safety
+- Works independently for students, courses, and graduate programs
+- Takes effect immediately (runtime only)
+
+---
+
 ## Algorithmic Details
 
 ### Q: How does prerequisite checking work?
@@ -263,6 +474,14 @@ Production versions would support various academic structures.
 3. Industry demand and growth statistics
 4. Salary and advancement potential data
 
+### Q: How does the AI conversation system work?
+**A:** The AI advisor system:
+1. Maintains conversation context across multiple exchanges
+2. Uses student academic profile for personalized responses
+3. Integrates risk assessment and recommendation data
+4. Provides contextually relevant suggested questions
+5. Handles conversation flow naturally without repetitive greetings
+
 ---
 
 ## Future Enhancements
@@ -275,8 +494,9 @@ Production versions would support various academic structures.
 - Industry partnership integration
 - Alumni outcome tracking
 - Mobile application
-- Chatbot advisor interface
-- Parent/advisor dashboards
+- **Advanced AI features** (voice interaction, multilingual support) 🆕
+- **Real-time collaboration** (shared planning sessions) 🆕
+- **Integration APIs** (SIS, LMS, career services) 🆕
 
 ### Q: How would this scale for a real university?
 **A:** Production implementation would require:
@@ -287,7 +507,81 @@ Production versions would support various academic structures.
 - Performance monitoring and analytics
 - Privacy and security measures
 - Multi-campus support
+- **Azure enterprise-grade infrastructure** 🆕
+- **Advanced AI model training** on institutional data 🆕
+- **Real-time data synchronization** across systems 🆕
+
+### Q: What are the next development priorities?
+**A:** Based on the current POC success:
+
+**Phase 1 (Immediate):**
+- Database persistence layer
+- User authentication system
+- Enhanced AI conversation capabilities
+- Real-time data integration
+
+**Phase 2 (Short-term):**
+- Mobile application development
+- Advanced analytics dashboard
+- Machine learning model implementation
+- External system integrations
+
+**Phase 3 (Long-term):**
+- Multi-university platform
+- Advanced AI features
+- Predictive analytics at scale
+- Enterprise security compliance
 
 ---
 
-*This FAQ covers the core functionality of the AI Academic Advisor POC. For technical questions or additional details, please refer to the codebase documentation or contact the development team.*
+## Security & Compliance
+
+### Q: How is data security handled in the POC?
+**A:** Current security measures:
+- Admin mode password protection
+- Runtime-only data storage (no persistence)
+- Environment variable configuration for API keys
+- Input validation and sanitization
+- Error handling without data exposure
+
+### Q: What would production security include?
+**A:** Production security would add:
+- Multi-factor authentication
+- Role-based access control
+- Data encryption at rest and in transit
+- FERPA compliance measures
+- Audit logging and monitoring
+- Regular security assessments
+- Azure security center integration
+
+---
+
+## Performance & Monitoring
+
+### Q: How does the system perform with multiple users?
+**A:** The POC is designed for demo purposes with:
+- Client-side state management
+- API rate limiting awareness
+- Graceful error handling
+- Responsive UI design
+
+### Q: What monitoring is available?
+**A:** Current monitoring includes:
+- Console logging for debugging
+- Error reporting in the UI
+- API response status tracking
+
+### Q: What would production monitoring include?
+**A:** Production monitoring would add:
+- Azure Application Insights integration
+- Real-time performance metrics
+- User engagement analytics
+- System health dashboards
+- Automated alerting
+- Usage pattern analysis
+
+---
+
+*This FAQ covers the complete functionality of the AI Academic Advisor POC including all recent updates. For technical questions or additional details about new features, please refer to the codebase documentation, admin interface help text, or contact the development team.*
+
+**Latest Update:** January 2025 - Added Admin Management System, AI Academic Advisor Chat, Azure Deployment Configuration, and Enhanced Data Import/Export Features.

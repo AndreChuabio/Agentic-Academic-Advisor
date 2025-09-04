@@ -113,7 +113,7 @@ Respond as Dr. Sarah Chen:`;
       // Azure OpenAI configuration
       const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT || 'https://palo-sg-presales.openai.azure.com';
       const azureApiKey = process.env.OPENAI_API_KEY || process.env.AZURE_OPENAI_KEY;
-      const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4-1106-preview';
+      const deploymentName = process.env.AZURE_OPENAI_DEPLOYMENT_NAME || 'gpt-4.1-mini';
       const apiVersion = process.env.AZURE_OPENAI_API_VERSION || '2024-02-01';
       
       if (!azureApiKey) {
