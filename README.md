@@ -45,7 +45,35 @@ The POC now includes a comprehensive administrative interface for managing cours
 - **Output**: Full CRUD operations with validation and export capabilities
 - **Features**: Course management, graduate program administration, bulk data operations
 
-## 🛠 Technical Stack
+## � UI/UX Screenshots
+
+### Risk Assessment Interface
+![Risk Assessment](screenshots/risk%20assesment%20interface.png)
+*Graduation risk assessment showing color-coded risk levels and actionable recommendations*
+
+### Course Recommendations
+![Course Recommendations](screenshots/course%20recommendations.png)
+*Career-based course recommendations with explanations and prerequisite information*
+
+### Prerequisite Visualization
+![Prerequisite Visualization](screenshots/prerequisite%20viz.png)
+*Interactive prerequisite chain visualization for academic planning*
+
+### Career Progress Tracking
+![Career Progress Tracking](screenshots/Career-Progress.png)
+*Student progress tracking toward specific career goals with completion percentages*
+
+### Administrative Interface
+![Admin Interface](screenshots/Admin%20Interface.png)
+*Comprehensive admin dashboard for managing courses, students, and graduate programs*
+
+### Graduate Programs & Pathways
+![Graduate Programs](screenshots/graduate%20programs%20%26%20pathways.png)
+*Post-graduation pathway recommendations and graduate program explorer*
+
+> **Note**: To view the live interface, follow the setup instructions below and run the application locally.
+
+## �🛠 Technical Stack
 
 - **Frontend**: Next.js 15 with TypeScript
 - **Styling**: Tailwind CSS 4
