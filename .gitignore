@@ -24,6 +24,9 @@
 .DS_Store
 *.pem
 
+# conversation history (private development notes)
+gpt-convo-history.md/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
