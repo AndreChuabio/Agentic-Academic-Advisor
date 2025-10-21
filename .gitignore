@@ -27,6 +27,12 @@
 # conversation history (private development notes)
 gpt-convo-history.md/
 
+# prompts and instructions (private development notes)
+.github/prompts/
+*.prompt.md
+*.prompt.yaml
+.github/instructions/
+
 # debug
 npm-debug.log*
 yarn-debug.log*
