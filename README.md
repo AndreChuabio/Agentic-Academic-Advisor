@@ -1,51 +1,51 @@
 # AI Academic Advisor - POC Implementation
 
-## 🎯 Project Overview
+## Project Overview
 
 This is a **Proof of Concept (POC)** for an AI-powered Academic Advisor system that demonstrates how artificial intelligence can help students avoid late graduations and make better academic choices. The system provides early warning risk assessments, personalized course recommendations, prerequisite visualizations, and career progress tracking.
 
-**🆕 NEW: Admin Management Extension**
+**NEW: Admin Management Extension**
 The POC now includes a comprehensive administrative interface for managing courses and graduate programs. See `ADMIN_EXTENSION_README.md` for detailed documentation of the new admin capabilities.
 
-## 🚀 Key Features
+## Key Features
 
-### 1. Graduation Risk Assessment ⚠️
+### 1. Graduation Risk Assessment
 - **Purpose**: Early warning system to prevent late graduations
 - **Input**: Student ID
 - **Output**: Risk level (Green/Yellow/Red) with actionable recommendations
 - **Algorithm**: Analyzes credit progress, GPA trends, and semester pacing
 
-### 2. Career-Based Course Recommendations 📚
+### 2. Career-Based Course Recommendations
 - **Purpose**: Personalized course guidance based on career goals
 - **Input**: Career selection + optional student ID
 - **Output**: Prioritized course recommendations with explanations
 - **Algorithm**: Matches courses to career requirements and filters completed courses
 
-### 3. Prerequisite Visualization 🔗
+### 3. Prerequisite Visualization
 - **Purpose**: Clear visualization of course dependencies
 - **Input**: Course ID
 - **Output**: Visual prerequisite chain showing course relationships
 - **Algorithm**: Displays prerequisite trees for academic planning
 
-### 4. Career Progress Tracking 📊
+### 4. Career Progress Tracking
 - **Purpose**: Track student readiness for target careers
 - **Input**: Student ID + Career Goal
 - **Output**: Progress percentage, completion status, and next steps
 - **Algorithm**: Calculates completion based on required courses
 
-### 5. Post-Graduation Pathways 🎯
+### 5. Post-Graduation Pathways
 - **Purpose**: Explore graduate school and career opportunities
 - **Input**: Student academic profile
 - **Output**: Recommended pathways with eligibility assessment
 - **Algorithm**: Matches student qualifications to opportunities
 
-### 6. Administrative Interface 🔧 **NEW**
+### 6. Administrative Interface **NEW**
 - **Purpose**: Comprehensive data management for courses and graduate programs
 - **Input**: Administrative credentials and data
 - **Output**: Full CRUD operations with validation and export capabilities
 - **Features**: Course management, graduate program administration, bulk data operations
 
-## � UI/UX Screenshots
+## UI/UX Screenshots
 
 ### Risk Assessment Interface
 ![Risk Assessment](screenshots/risk%20assesment%20interface.png)
@@ -73,7 +73,7 @@ The POC now includes a comprehensive administrative interface for managing cours
 
 > **Note**: To view the live interface, follow the setup instructions below and run the application locally.
 
-## �🛠 Technical Stack
+## Technical Stack
 
 - **Frontend**: Next.js 15 with TypeScript
 - **Styling**: Tailwind CSS 4
@@ -81,7 +81,7 @@ The POC now includes a comprehensive administrative interface for managing cours
 - **Data**: Mock data (hardcoded for POC)
 - **State Management**: React hooks (useState, useEffect)
 
-## 📋 Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 - Node.js 18+ installed
@@ -136,6 +136,9 @@ docker build -t ai-academic-advisor .
 
 # Run the container
 docker run -p 3000:3000 ai-academic-advisor
+```
+
+## Demo Scenarios
 
 # Or use Docker Compose (recommended)
 docker-compose up --build
@@ -175,7 +178,7 @@ docker-compose up --build
 - High School Teacher
 - Registered Nurse
 
-## 📊 API Endpoints
+## API Endpoints
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -203,7 +206,7 @@ GET /api/prerequisites?courseId=CS301
 GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 ```
 
-## 🏗 Architecture Overview
+## Architecture Overview
 
 ```
 ├── app/
@@ -251,7 +254,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 └── README.md
 ```
 
-## 🎬 Demo Instructions
+## Demo Instructions
 
 1. **Start the Application**
    ```bash
@@ -268,7 +271,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
    - Prerequisites: CS 301 Advanced Algorithms chain
    - Progress Tracking: Carol Davis toward Data Scientist
 
-## 📈 Business Value
+## Business Value
 
 ### Problems Solved:
 - **Late Graduations**: 30% reduction through early intervention
@@ -283,7 +286,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 - **Integrates with existing university systems**
 - **Can help thousands of students immediately**
 
-## 🔮 Production Roadmap
+## Production Roadmap
 
 ### Phase 1: POC Enhancement (2-3 months)
 - Real database integration
@@ -303,7 +306,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 - Advanced AI features
 - Performance optimization
 
-## 🛡 Limitations (POC Scope)
+## Limitations (POC Scope)
 
 - **No Database**: Uses hardcoded mock data
 - **No Authentication**: Demo accounts only
@@ -312,7 +315,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 - **No External APIs**: Mock external data sources
 - **Basic UI**: Professional but not production-ready
 
-## 🎯 Success Criteria
+## Success Criteria
 
 ### Technical Success:
 - ✅ All 4 features work without errors
@@ -326,7 +329,7 @@ GET /api/progress-tracking?studentId=STU001&careerId=software-engineer
 - ✅ Path to production implementation
 - ✅ Funding/approval for next phase
 
-## 🤝 Contributing
+## Contributing
 
 This is a POC project. For production development:
 1. Follow the architecture patterns established
@@ -335,7 +338,7 @@ This is a POC project. For production development:
 4. Add proper error handling
 5. Include comprehensive testing
 
-## 📞 Support
+## Support
 
 For demo questions or technical issues:
 - Review the demo script (`DEMO_SCRIPT.md`)
@@ -343,6 +346,6 @@ For demo questions or technical issues:
 - Verify all components render properly
 - Test the demo flow multiple times
 
-## 📄 License
+## License
 
 This is a POC project for demonstration purposes.

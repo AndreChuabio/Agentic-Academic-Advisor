@@ -32,6 +32,7 @@ gpt-convo-history.md/
 *.prompt.md
 *.prompt.yaml
 .github/instructions/
+.github/instructions.md
 
 # debug
 npm-debug.log*
@@ -48,3 +49,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local env files
+instructions.local.md
